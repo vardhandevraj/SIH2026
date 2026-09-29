@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #05070d;
+  color: #e2e8f0;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-mono {
+  font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+
+.glass {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.glass-strong {
+  background: linear-gradient(160deg, rgba(15, 23, 42, 0.97), rgba(10, 14, 24, 0.98));
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  backdrop-filter: blur(14px);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.35) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.35);
+  border-radius: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.55);
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.react-flow__attribution {
+  background: transparent !important;
+  color: #475569 !important;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+}
+
+/* Gradient text. Must use `background-image`, not the `background` shorthand:
+   the shorthand resets `background-clip` to border-box, which paints the
+   gradient as a solid block instead of clipping it to the glyphs. */
+.text-gradient {
+  background-image: linear-gradient(90deg, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.glow {
+  box-shadow: 0 0 24px -6px rgba(99, 102, 241, 0.55);
+}
+
+/* Keep hover repaints cheap: only animate compositor-friendly properties. */
+button,
+a,
+input {
+  transition-property: color, background-color, border-color, opacity, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Skip offscreen rendering work for long scrolling lists. */
+.render-lazy {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: strip app chrome, keep the report readable. */
+@media print {
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  aside,
+  .no-print,
+  .react-flow__controls,
+  .react-flow__minimap,
+  .react-flow__attribution {
+    display: none !important;
+  }
+
+  .glass,
+  .glass-strong {
+    background: #fff !important;
+    border-color: #ddd !important;
+    backdrop-filter: none !important;
+  }
+
+  main {
+    overflow: visible !important;
+  }
+}
