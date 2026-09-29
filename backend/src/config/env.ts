@@ -18,7 +18,8 @@ export const env = {
   etherscanKey: process.env.ETHERSCAN_API_KEY || "",
   groqKey: process.env.GROQ_API_KEY || "",
   groqModel: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
-  pythonUrl: process.env.PYTHON_ANALYSIS_URL || "http://127.0.0.1:5090",
+  // An explicitly empty value disables the optional Python service; undefined falls back to the local default.
+  pythonUrl: process.env.PYTHON_ANALYSIS_URL === undefined ? "http://127.0.0.1:5090" : process.env.PYTHON_ANALYSIS_URL,
   demoMode: bool(process.env.DEMO_MODE, true),
 };
 

@@ -4,6 +4,9 @@
   "private": true,
   "description": "ChainTrace backend - wallet attribution API",
   "type": "commonjs",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.json",

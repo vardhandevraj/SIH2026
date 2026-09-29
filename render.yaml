@@ -1,0 +1,59 @@
+# Render Blueprint for ChainTrace
+#
+# Deploy: https://render.com/ -> New -> Blueprint -> point at this repo.
+#
+# After the first deploy, wire the two service URLs together (see DEPLOY.md step 4):
+#   chaintrace-api CORS_ORIGIN = https://chaintrace-web.onrender.com
+#   chaintrace-web VITE_API_URL = https://chaintrace-api.onrender.com/api
+
+services:
+  # ------------------------------------------------------------------ API ----
+  - type: web
+    name: chaintrace-api
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && npm start
+    healthCheckPath: /api/health
+    envVars:
+      # node:sqlite (DatabaseSync) requires Node 24.
+      - key: NODE_VERSION
+        value: "24"
+      - key: DEMO_MODE
+        value: "true"
+      # Free tier uses an ephemeral disk: the DB is rebuilt and reseeded on restart.
+      - key: DATABASE_PATH
+        value: ./data/chaintrace.db
+      # Set this to your frontend URL after the first deploy.
+      - key: CORS_ORIGIN
+        sync: false
+      # Explicitly empty: disables the optional Python service and uses the
+      # built-in TypeScript graph engine instead.
+      - key: PYTHON_ANALYSIS_URL
+        value: ""
+      # Optional - only needed for live (non-demo) on-chain data.
+      - key: ALCHEMY_API_KEY
+        sync: false
+      - key: ETHERSCAN_API_KEY
+        sync: false
+      # Optional - AI explanations fall back to a deterministic template.
+      - key: GROQ_API_KEY
+        sync: false
+
+  # ----------------------------------------------------------------- WEB ----
+  - type: web
+    name: chaintrace-web
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    # Vite uses BrowserRouter, so every path must serve index.html or deep
+    # links like /wallet/0x... 404 on refresh.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      # Read at BUILD time by import.meta.env - changing it requires a redeploy.
+      # Set this to your backend URL after the first deploy.
+      - key: VITE_API_URL
+        sync: false
